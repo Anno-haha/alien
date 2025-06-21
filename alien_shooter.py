@@ -28,10 +28,20 @@ WIN_SCORE = 100             # 获胜所需分数
 # ==================== 颜色定义 ====================
 BLACK = (0, 0, 0)           # 黑色
 WHITE = (255, 255, 255)     # 白色（背景色）
+LIGHT_GRAY = (200, 200, 200) # 淡灰色（背景矩形）
 GREEN = (0, 255, 0)         # 绿色（玩家飞机和血量条）
 RED = (255, 0, 0)           # 红色（外星人）
 BLUE = (0, 0, 255)          # 蓝色
-YELLOW = (255, 255, 0)      # 黄色（子弹）
+YELLOW = (0, 0, 0)      # 黑色（子弹）
+
+# ==================== 背景效果常量 ====================
+BACKGROUND_RECT_WIDTH = 20   # 背景矩形宽度
+BACKGROUND_RECT_HEIGHT = 60  # 背景矩形高度
+BACKGROUND_SPEED = 2         # 背景矩形移动速度（像素/帧）
+BACKGROUND_SPACING = 100     # 背景矩形间距
+
+# ==================== 外星人移动常量 ====================
+ALIEN_HORIZONTAL_SPEED = 0.5 # 外星人左右移动速度（像素/帧）
 
 # ==================== 玩家飞机类 ====================
 class Player:
@@ -99,14 +109,35 @@ class Alien:
         self.y = y                      # 外星人y坐标
         self.width = ALIEN_SIZE         # 外星人宽度
         self.height = ALIEN_SIZE        # 外星人高度
-        self.speed = ALIEN_SPEED        # 外星人移动速度
+        self.speed = ALIEN_SPEED        # 外星人向下移动速度
         self.health = ALIEN_HEALTH      # 外星人当前血量
+
+        # 左右移动相关属性
+        self.horizontal_speed = ALIEN_HORIZONTAL_SPEED  # 左右移动速度
+        self.horizontal_direction = random.choice([-1, 1])  # 随机选择左(-1)或右(1)移动
+        self.direction_change_timer = 0  # 方向改变计时器
+        self.direction_change_interval = random.randint(60, 180)  # 随机1-3秒改变方向(60帧=1秒)
 
     def move(self):
         """
-        移动外星人（向下移动）
+        移动外星人（向下移动 + 左右随机移动）
         """
+        # 向下移动
         self.y += self.speed
+
+        # 左右随机移动
+        self.x += self.horizontal_direction * self.horizontal_speed
+
+        # 边界检查：如果碰到屏幕边缘，反向移动
+        if self.x <= 0 or self.x >= SCREEN_WIDTH - self.width:
+            self.horizontal_direction *= -1
+
+        # 随机改变移动方向
+        self.direction_change_timer += 1
+        if self.direction_change_timer >= self.direction_change_interval:
+            self.horizontal_direction = random.choice([-1, 1])
+            self.direction_change_timer = 0
+            self.direction_change_interval = random.randint(60, 180)  # 重新设置随机间隔
 
     def get_rect(self):
         """
@@ -200,6 +231,7 @@ class Game:
         self.player = Player(SCREEN_WIDTH // 2 - PLAYER_SIZE // 2, SCREEN_HEIGHT - 50)
         self.aliens = []        # 外星人列表
         self.bullets = []       # 子弹列表
+        self.background_rects = []  # 背景矩形列表
 
         # ==================== 游戏状态 ====================
         self.score = 0          # 当前分数
@@ -213,6 +245,9 @@ class Game:
 
         # ==================== 字体设置 ====================
         self.font = pygame.font.Font(None, 36)  # 用于显示文字的字体
+
+        # ==================== 背景效果初始化 ====================
+        self.init_background_rects()  # 初始化背景矩形
         
     def handle_input(self):
         """
@@ -275,7 +310,52 @@ class Game:
 
             # 更新上次发射时间
             self.last_bullet_time = current_time
-    
+
+    def init_background_rects(self):
+        """
+        初始化背景矩形
+        在屏幕上创建均匀分布的背景矩形
+        """
+        self.background_rects = []
+        # 在屏幕上创建多行多列的背景矩形
+        for y in range(-BACKGROUND_RECT_HEIGHT, SCREEN_HEIGHT + BACKGROUND_SPACING, BACKGROUND_SPACING):
+            for x in range(0, SCREEN_WIDTH, BACKGROUND_SPACING):
+                # 添加一些随机偏移，让背景更自然
+                offset_x = random.randint(-20, 20)
+                offset_y = random.randint(-20, 20)
+                rect = {
+                    'x': x + offset_x,
+                    'y': y + offset_y,
+                    'width': BACKGROUND_RECT_WIDTH,
+                    'height': BACKGROUND_RECT_HEIGHT
+                }
+                self.background_rects.append(rect)
+
+    def update_background(self):
+        """
+        更新背景矩形位置
+        让背景矩形向上移动，创造飞机前进的效果
+        """
+        # 移动所有背景矩形
+        for rect in self.background_rects[:]:
+            rect['y'] -= BACKGROUND_SPEED
+
+            # 如果矩形移出屏幕上方，移除它
+            if rect['y'] + rect['height'] < 0:
+                self.background_rects.remove(rect)
+
+        # 在屏幕底部添加新的背景矩形
+        if len(self.background_rects) < 50:  # 保持一定数量的背景矩形
+            for x in range(0, SCREEN_WIDTH, BACKGROUND_SPACING):
+                offset_x = random.randint(-20, 20)
+                rect = {
+                    'x': x + offset_x,
+                    'y': SCREEN_HEIGHT + random.randint(0, BACKGROUND_SPACING),
+                    'width': BACKGROUND_RECT_WIDTH,
+                    'height': BACKGROUND_RECT_HEIGHT
+                }
+                self.background_rects.append(rect)
+
     def update_bullets(self):
         """
         更新所有子弹的位置
@@ -342,6 +422,12 @@ class Game:
         # 填充白色背景
         self.screen.fill(WHITE)
 
+        # ==================== 绘制背景效果 ====================
+        # 绘制移动的背景矩形
+        for rect in self.background_rects:
+            pygame.draw.rect(self.screen, LIGHT_GRAY,
+                           (rect['x'], rect['y'], rect['width'], rect['height']))
+
         # ==================== 绘制游戏对象 ====================
         # 绘制玩家飞机
         self.player.draw(self.screen)
@@ -394,6 +480,9 @@ class Game:
         # 重置时间控制
         self.last_bullet_time = 0
         self.last_alien_spawn_time = 0
+
+        # 重新初始化背景
+        self.init_background_rects()
     
     def run(self):
         """
@@ -416,6 +505,9 @@ class Game:
                         self.reset_game()
 
             # ==================== 游戏逻辑更新 ====================
+            # 背景效果始终更新（即使游戏暂停也保持动画效果）
+            self.update_background()    # 更新背景矩形位置
+
             # 只有在游戏进行中才更新游戏逻辑
             if not self.game_over and not self.game_won:
                 self.handle_input()     # 处理玩家输入
