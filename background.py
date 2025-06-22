@@ -14,10 +14,15 @@ class BackgroundManager:
     负责创建、更新和绘制移动的背景矩形效果
     """
     
-    def __init__(self):
+    def __init__(self, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT):
         """
         初始化背景管理器
+        参数:
+            screen_width: 屏幕宽度
+            screen_height: 屏幕高度
         """
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         self.background_rects = []  # 背景矩形列表
         self.init_background_rects()
     
@@ -29,8 +34,8 @@ class BackgroundManager:
         self.background_rects = []
         
         # 在屏幕上创建多行多列的背景矩形
-        for y in range(-BACKGROUND_RECT_HEIGHT, SCREEN_HEIGHT + BACKGROUND_SPACING, BACKGROUND_SPACING):
-            for x in range(0, SCREEN_WIDTH, BACKGROUND_SPACING):
+        for y in range(-BACKGROUND_RECT_HEIGHT, self.screen_height + BACKGROUND_SPACING, BACKGROUND_SPACING):
+            for x in range(0, self.screen_width, BACKGROUND_SPACING):
                 # 添加一些随机偏移，让背景更自然
                 offset_x = random.randint(-20, 20)
                 offset_y = random.randint(-20, 20)
@@ -64,11 +69,11 @@ class BackgroundManager:
         在屏幕底部生成新的背景矩形
         私有方法，由update方法调用
         """
-        for x in range(0, SCREEN_WIDTH, BACKGROUND_SPACING):
+        for x in range(0, self.screen_width, BACKGROUND_SPACING):
             offset_x = random.randint(-20, 20)
             rect = {
                 'x': x + offset_x,
-                'y': SCREEN_HEIGHT + random.randint(0, BACKGROUND_SPACING),
+                'y': self.screen_height + random.randint(0, BACKGROUND_SPACING),
                 'width': BACKGROUND_RECT_WIDTH,
                 'height': BACKGROUND_RECT_HEIGHT
             }

@@ -5,8 +5,13 @@
 
 # ==================== 屏幕配置 ====================
 SCREEN_WIDTH = 600          # 屏幕宽度（像素）
-SCREEN_HEIGHT = 800         # 屏幕高度（像素）
+SCREEN_HEIGHT = 750         # 屏幕高度（像素）
 FPS = 60                    # 游戏帧率
+
+# ==================== 双人对战屏幕配置 ====================
+VERSUS_SCREEN_WIDTH = 1000  # 双人对战屏幕宽度
+VERSUS_SCREEN_HEIGHT = 750  # 双人对战屏幕高度
+VERSUS_SPLIT_X = VERSUS_SCREEN_WIDTH // 2  # 屏幕分割线x坐标
 
 # ==================== 游戏对象尺寸 ====================
 PLAYER_SIZE = 30            # 玩家飞机大小（正方形边长）
@@ -63,11 +68,91 @@ EXPLOSION_SPEED = 3         # 爆炸粒子扩散速度
 EXPLOSION_COLORS = [RED, ORANGE, YELLOW]  # 爆炸颜色
 
 # ==================== UI配置 ====================
-FONT_SIZE = 36              # 字体大小
+FONT_SIZE = 24              # 主窗口字体大小
+SMALL_FONT_SIZE = 18        # 小字体大小
+UPGRADE_WINDOW_FONT_SIZE = 28  # 升级窗口字体大小
 SCORE_POSITION = (10, 10)   # 分数显示位置
 
-# ==================== 游戏文本 ====================
-GAME_TITLE = "射击外星人"
+# ==================== 升级窗口配置 ====================
+UPGRADE_WINDOW_WIDTH = 400  # 升级窗口宽度
+UPGRADE_WINDOW_HEIGHT = 300 # 升级窗口高度
+
+# ==================== 游戏模式配置 ====================
+CLASSIC_MODE = "classic"
+RANDOM_MODE = "random"
+VERSUS_MODE = "versus"
+WIN_SCORE = 100                 # 经典模式胜利分数
+VERSUS_WIN_SCORE = 500          # 双人对战胜利分数
+POINTS_PER_KILL = 5             # 每击杀一个外星人获得的分数
+UPGRADE_SCORE_INTERVAL = 100    # 每100分触发一次升级选择
+
+# ==================== Upgrade System Configuration ====================
+BULLET_SPEED_UPGRADE = 0.15     # Bullet speed upgrade 15%
+ALIEN_SPAWN_UPGRADE = 0.2       # Alien count upgrade 10%
+
+# ==================== New Upgrade Options ====================
+CLEAR_SCREEN_COOLDOWN = 40000    # Clear screen ability cooldown (40 seconds in milliseconds)
+CLEAR_SCREEN_COOLDOWN_REDUCTION = 10000  # Cooldown reduction per upgrade (10 seconds)
+CLEAR_SCREEN_MIN_COOLDOWN = 20000  # Minimum cooldown (20 seconds)
+TRIPLE_SHOT_SIDE_SPEED_RATIO = 0.5  # Side bullets speed ratio (50% of center bullet)
+TRIPLE_SHOT_SIDE_DAMAGE = 10     # Initial side bullet damage
+TRIPLE_SHOT_DAMAGE_MULTIPLIER = 1.5  # Damage multiplier for subsequent upgrades
+TRIPLE_SHOT_MAX_DAMAGE = 100     # Maximum side bullet damage
+PLAYER_SPEED_UPGRADE = 0.2       # Player speed upgrade 20%
+SCORE_MULTIPLIER_UPGRADE = 0.15  # Score multiplier upgrade 15%
+
+# ==================== Wingman Configuration ====================
+WINGMAN_SIZE_RATIO = 0.25        # Wingman size ratio (1/4 of player size)
+WINGMAN_BULLET_DAMAGE = 10       # Wingman bullet damage
+WINGMAN_BULLET_SPEED_RATIO = 0.5 # Wingman bullet speed ratio (50% of player bullet)
+WINGMAN_SPEED = 1                # Wingman movement speed (pixels per frame)
+WINGMAN_Y_OFFSET = 5             # Wingman Y position offset from bottom
+WINGMAN_BULLET_COLOR = (255, 20, 147)  # Pink color for wingman bullets
+
+# ==================== Milestone System ====================
+MILESTONE_SCORE_INTERVAL = 1000  # Every 1000 points
+MILESTONE_ALIEN_INCREASE = 0.6   # 60% alien count increase at milestones
+
+# ==================== End Game System ====================
+UPGRADE_STOP_SCORE = 10000       # Score at which upgrades stop appearing
+HEALTH_BOOST_INTERVAL = 500     # Every 500 points after 10000
+HEALTH_BOOST_MULTIPLIER = 0.3   # 30% health increase per boost
+
+# ==================== Upgrade Types ====================
+UPGRADE_BULLET_SPEED = "bullet_speed"
+UPGRADE_CLEAR_SCREEN = "clear_screen"
+UPGRADE_TRIPLE_SHOT = "triple_shot"
+UPGRADE_PLAYER_SPEED = "player_speed"
+UPGRADE_SCORE_MULTIPLIER = "score_multiplier"
+UPGRADE_WINGMAN = "wingman"
+
+# ==================== Game Text ====================
+GAME_TITLE = "Alien Shooter"
 SCORE_TEXT = "Score: {}"
-GAME_OVER_TEXT = "Defeat"
+GAME_OVER_TEXT = "Game Over! Press R to restart"
 VICTORY_TEXT = "Victory! Press R to restart"
+
+# ==================== Menu Text ====================
+MENU_TITLE = "Welcome to Alien Shooter!"
+MENU_SUBTITLE = "Select Your Mode"
+CLASSIC_MODE_TEXT = "1. Classic Mode"
+RANDOM_MODE_TEXT = "2. Random Mode"
+VERSUS_MODE_TEXT = "3. Versus Mode"
+CLASSIC_MODE_DESC = 'Reach 100 points to win'
+RANDOM_MODE_DESC = "Endless fun, upgrade every 100 points"
+VERSUS_MODE_DESC = "2 players, first to 500 points wins"
+MENU_INSTRUCTION = "Press 1, 2, or 3 to choose mode"
+
+# ==================== Upgrade Menu Text ====================
+UPGRADE_TITLE = "Choose Your Upgrade!"
+UPGRADE_INSTRUCTION = "Press 1, 2 or 3 to choose upgrade"
+
+# ==================== Upgrade Descriptions ====================
+UPGRADE_DESCRIPTIONS = {
+    UPGRADE_BULLET_SPEED: "Increase Bullet Speed (+15%)",
+    UPGRADE_CLEAR_SCREEN: "Clear Screen Ability (40s cooldown, -10s per upgrade, min 20s)",
+    UPGRADE_TRIPLE_SHOT: "Triple Shot (10 DMG sides, +50% DMG per upgrade, max 100)",
+    UPGRADE_PLAYER_SPEED: "Increase Ship Speed (+20%)",
+    UPGRADE_SCORE_MULTIPLIER: "Score Multiplier (+15%)",
+    UPGRADE_WINGMAN: "Star Wingman (Pink bullets, 10 DMG, follows you)"
+}

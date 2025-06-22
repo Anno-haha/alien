@@ -1,67 +1,131 @@
-# 射击外星人游戏
+# Alien Shooter Game
 
-一个使用Python和Pygame开发的简单射击游戏。
+A simple shooting game developed with Python and Pygame.
 
-## 游戏特性
+## Game Features
 
-- **屏幕尺寸**: 600x800像素
-- **玩家飞机**: 30x30像素的绿色矩形
-- **外星人**: 20*60像素的红色矩形，带血量条，智能左右移动
-- **移动速度**: 玩家4像素/帧，外星人1像素/帧
-- **射击系统**: 每秒自动发射5发彩色子弹，每发伤害50
-- **彩色子弹**: 子弹颜色按红、绿、蓝循环，更加醒目
-- **爆炸特效**: 外星人被击败时产生粒子爆炸动画
-- **动态背景**: 淡灰色矩形向上移动，模拟飞机前进
-- **外星人生成**: 每5秒随机生成1-5个外星人
-- **计分系统**: 击杀外星人获得5分，达到100分获胜
-- **游戏结束**: 玩家与外星人碰撞或外星人到达底部则失败
+### 🎮 **Game Modes**
+- **Classic Mode**: Traditional gameplay, win at 100 points
+- **Random Mode**: Endless game, upgrade selection every 100 points
 
-## 游戏控制
+### 🚀 **Core Features**
+- **Screen Size**: 600x800 pixels
+- **Player Aircraft**: 30x30 pixel green rectangle
+- **Aliens**: 30x30 pixel red rectangles with health bars, intelligent left-right movement
+- **Movement Speed**: Player 4 pixels/frame, aliens 1 pixel/frame
+- **Shooting System**: Auto-fire 5 colored bullets per second, 50 damage each
+- **Colored Bullets**: Bullet colors cycle through red, green, blue for visibility
+- **Explosion Effects**: Particle explosion animation when aliens are defeated
+- **Dynamic Background**: Light gray rectangles moving upward, simulating aircraft forward motion
 
-- **方向键**: 控制飞机上下左右移动
-- **自动射击**: 子弹会自动发射
-- **R键**: 游戏结束或获胜后重新开始
+### 📈 **Upgrade System** (Random Mode)
+- **Trigger Condition**: Every multiple of 100 points
+- **Selection Method**: 3 random upgrades chosen from 5 available options
+- **Milestone System**: Every 1000 points, alien count increases by 60%
+- **Upgrade Options**:
+  - **Bullet Speed**: +15% bullet speed (alien count +10%)
+  - **Clear Screen**: 40s cooldown initially, -15s per upgrade (SPACE key)
+  - **Triple Shot**: First: 3 bullets (sides 10 DMG), Later: +50% side damage
+  - **Ship Speed**: +20% movement speed
+  - **Score Multiplier**: +15% points per kill
+- **Progressive Upgrades**: Many upgrades improve with multiple selections
 
-## 安装和运行
+### 🎯 **Game Rules**
+- **Alien Spawning**: Randomly spawn 1-5 aliens every 5 seconds
+- **Scoring System**: 5 points per alien killed
+- **Failure Conditions**: Player collision with aliens or aliens reaching the bottom
 
-1. 安装依赖：
+## Game Controls
+
+### 🎮 **Start Menu**
+- **1 Key**: Select Classic Mode
+- **2 Key**: Select Random Mode
+- **3 Key**: Select Versus Mode
+
+### 🕹️ **In Game**
+- **Arrow Keys**: Control aircraft movement (up, down, left, right)
+- **Auto Shooting**: Bullets fire automatically
+- **SPACE Key**: Clear screen ability (if unlocked, 20s cooldown)
+- **R Key**: Restart after game over or victory
+
+### ⚔️ **Versus Mode Controls**
+- **Player 1**: WASD keys for movement (left half of screen)
+- **Player 2**: Arrow keys for movement (right half of screen)
+- **Auto Shooting**: Both players fire automatically
+- **Boundary Wall**: Center divider prevents aliens from crossing between player areas
+- **R Key**: Restart after game over
+
+### ⬆️ **Upgrade Menu** (Random Mode)
+- **1, 2, 3 Keys**: Select upgrade options
+
+## Installation and Running
+
+1. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. 运行游戏：
+2. Run the game:
 ```bash
 python main.py
 ```
 
-## 游戏规则
+## Game Rules
 
-1. 使用方向键控制绿色飞机移动
-2. 飞机会自动发射彩色子弹（红、绿、蓝循环）
-3. 击中红色外星人可造成伤害（外星人有血量条显示）
-4. 外星人被击败时会产生爆炸特效
-5. 每击杀一个外星人获得5分
-6. 达到100分即可获胜
-7. 如果飞机与外星人碰撞或外星人到达底部则游戏失败
-8. 游戏结束后按R键重新开始
+### 🎯 **Basic Gameplay**
+1. Select mode (Classic or Random) at game start
+2. Use arrow keys to control the green aircraft
+3. Aircraft automatically fires colored bullets (red, green, blue cycle)
+4. Hit red aliens to deal damage (aliens have health bars)
+5. Aliens produce explosion effects when defeated
+6. Earn 5 points for each alien killed
 
-## 项目结构
+### 🏆 **Win/Loss Conditions**
+- **Classic Mode**: Win at 100 points
+- **Random Mode**: No victory condition, challenge for highest score
+- **Versus Mode**: First player to reach 500 points wins, or opponent loses
+- **Loss Condition**: Aircraft collision with aliens or aliens reaching the bottom
+
+### ⬆️ **Upgrade System** (Random Mode)
+1. **Early Game (0-9999 points)**: Overlay upgrade menu appears every 100 points
+2. **Game Pause**: Game pauses during upgrade selection for focused decision-making
+3. **Milestone System**: Every 1000 points, alien spawn rate increases by 60% (stops at 10000 points)
+4. **Selection Process**: 3 random upgrades chosen from 6 available options
+5. **Progressive Upgrades**: Many upgrades improve with multiple selections:
+   - **Bullet Speed**: +15% speed each time (aliens +10%)
+   - **Clear Screen**: Starts at 40s cooldown, reduces by 10s each upgrade (min 20s)
+   - **Triple Shot**: First gives 3 bullets (10 DMG sides), +50% side damage (max 100 DMG)
+   - **Ship Speed**: +20% movement speed each time
+   - **Score Multiplier**: +15% points per kill each time
+   - **Star Wingman**: Adds a star-shaped ally that fires pink bullets (10 DMG)
+6. **Endgame (10000+ points)**: No more upgrades, alien health increases by 30% every 500 points
+7. **Smart Filtering**: Maxed upgrades are automatically removed from selection
+8. **Strategic Depth**: Choose between immediate power or long-term growth
+
+### 🔄 **Restart**
+- Press R key to restart after game over
+- Restart returns to mode selection menu
+
+## Project Structure
 
 ```
 alien_shooter/
-├── main.py          # 程序入口点
-├── game.py          # 游戏主逻辑和状态管理
-├── entities.py      # 游戏实体类（Player, Alien, Bullet）
-├── background.py    # 背景效果管理
-├── config.py        # 游戏配置和常量
-├── requirements.txt # 依赖包列表
-└── README.md       # 项目说明文档
+├── main.py          # Program entry point
+├── game.py          # Single-player game logic and state management
+├── versus_game.py   # Versus mode game logic and state management
+├── entities.py      # Game entity classes (Player, Alien, Bullet)
+├── background.py    # Background effects management
+├── menu.py          # Menu system management
+├── upgrade_window.py # Independent upgrade selection window
+├── config.py        # Game configuration and constants
+├── requirements.txt # Dependency list
+└── README.md       # Project documentation
 ```
 
-## 技术实现
+## Technical Implementation
 
-- **模块化设计**: 代码按功能分离到不同模块，便于维护和扩展
-- **面向对象**: 使用类封装游戏实体和管理器
-- **配置分离**: 所有游戏参数集中在config.py中，便于调整
-- **Pygame库**: 用于图形渲染、事件处理和碰撞检测
-- **60FPS游戏循环**: 确保流畅的游戏体验
+- **Modular Design**: Code separated into different modules by function for easy maintenance and extension
+- **Object-Oriented**: Uses classes to encapsulate game entities and managers
+- **Configuration Separation**: All game parameters centralized in config.py for easy adjustment
+- **Pygame Library**: Used for graphics rendering, event handling, and collision detection
+- **60FPS Game Loop**: Ensures smooth gaming experience
