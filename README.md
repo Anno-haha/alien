@@ -1,5 +1,5 @@
 # Alien Shooter Game
-
+#求求你点个赞吧，我什么都会愿意的...(这是我的第一个项目，虽然是ai写的...)
 A simple shooting game developed with Python and Pygame.
 
 ## Game Features
